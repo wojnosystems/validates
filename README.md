@@ -1,6 +1,6 @@
 # Overview
 
-The Validates package provides a way to uniformly validate structs and their components/fields.
+The Validates package provides a way to uniformly validate structs and their components/fields in a Rails-like way. I've always loved the Validates class in the Rails package for model and input validation.
 
 I've opted against using tags because they are not extensible or programmatic. Far better to have compose-able validations than a set of meta code that cannot be altered or extended except by the author. In Go, meta programming using reflect is a hack and a dangerous, time-consuming one at that. Having written several reflect-based libraries, if you ever feel as though you must do it that way, stop and reconsider. reflect should always be a last resort.
 
@@ -110,3 +110,13 @@ func main() {
 	}
 }
 ```
+
+# Copyright
+
+Copyright © 2019 Chris Wojno. All rights reserved.
+
+No Warranties. Use this software at your own risk.
+
+# License
+
+[Creative Commons: Attribution-NonCommercial-ShareAlike 4.0 International](http://creativecommons.org/licenses/by-nc-sa/4.0/)
