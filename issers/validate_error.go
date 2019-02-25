@@ -1,9 +1,10 @@
 package issers
 
 import (
+	"github.com/wojnosystems/validates/ifaces"
 	"golang.org/x/text/message"
+	"net/url"
 	"reflect"
-	"validates/ifaces"
 )
 
 type SimpleValidateError string
@@ -51,6 +52,9 @@ var (
 	shouldBeEmailMsg          = "should be a valid email address"
 
 	shouldBeInStringSlice = "not an acceptable value"
+	shouldBeNotEmpty      = "not empty"
+
+	shouldBeURL = "should be URL but was not because %s"
 )
 
 type ShouldBeMsg struct {
@@ -151,6 +155,18 @@ func NewShouldMatchingRegexp() *ShouldBeMsg {
 func NewShouldBeInStringSlice() *ShouldBeMsg {
 	return &ShouldBeMsg{
 		MsgFmt: shouldBeInStringSlice,
+		Args:   []interface{}{},
+	}
+}
+func NewShouldBeURL(err *url.Error) *ShouldBeMsg {
+	return &ShouldBeMsg{
+		MsgFmt: shouldBeURL,
+		Args:   []interface{}{err.Err.Error()},
+	}
+}
+func NewShouldBeNotEmpty() *ShouldBeMsg {
+	return &ShouldBeMsg{
+		MsgFmt: shouldBeNotEmpty,
 		Args:   []interface{}{},
 	}
 }

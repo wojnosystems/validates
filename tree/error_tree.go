@@ -2,7 +2,7 @@ package tree
 
 import (
 	"container/list"
-	"validates/ifaces"
+	"github.com/wojnosystems/validates/ifaces"
 )
 
 // ErrorNode contains the errors for this node

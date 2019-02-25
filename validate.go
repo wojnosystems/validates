@@ -1,7 +1,7 @@
 package validates
 
 import (
-	"validates/issers"
+	"github.com/wojnosystems/validates/issers"
 )
 
 // The Validates package provides a way to uniformly validate structs and

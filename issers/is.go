@@ -2,10 +2,11 @@ package issers
 
 import (
 	"fmt"
+	"github.com/wojnosystems/validates/ifaces"
+	"github.com/wojnosystems/validates/tree"
+	"net/url"
 	"regexp"
 	"strings"
-	"validates/ifaces"
-	"validates/tree"
 )
 
 // Validater describes how structures should behave
@@ -235,6 +236,7 @@ func msgOrDefault(in func() ifaces.ValidateError, def ifaces.ValidateError) ifac
 // If the value could be empty, Required is assumed to have been called by the user of the library (that's probably you reading this now) as per the above.
 // Calling methods that require the object to exist will attempt to use the value as normal.
 // When using Required, it returns false if the value is missing. This allows you to skip validates if they don't make sense
+// @return true if valid (no errors added) false if not
 func (i *Is) Required(isPresent bool) bool {
 	if !isPresent {
 		i.True(false, func() ifaces.ValidateError {
@@ -246,6 +248,7 @@ func (i *Is) Required(isPresent bool) bool {
 }
 
 // IntBetween creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) IntBetween(value, low, high int, msg func() ifaces.ValidateError) bool {
 	if low > high {
 		panic("low cannot be greater than high")
@@ -256,6 +259,7 @@ func (i *Is) IntBetween(value, low, high int, msg func() ifaces.ValidateError) b
 }
 
 // IntGreaterThan creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) IntGreaterThan(value, low int, msg func() ifaces.ValidateError) bool {
 	return i.True(low < value, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeIntGreaterThan(low))
@@ -263,6 +267,7 @@ func (i *Is) IntGreaterThan(value, low int, msg func() ifaces.ValidateError) boo
 }
 
 // IntLessThan creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) IntLessThan(value, high int, msg func() ifaces.ValidateError) bool {
 	return i.True(value < high, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeIntLessThan(high))
@@ -270,6 +275,7 @@ func (i *Is) IntLessThan(value, high int, msg func() ifaces.ValidateError) bool 
 }
 
 // IntGreaterThanOrEqual creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) IntGreaterThanOrEqual(value, low int, msg func() ifaces.ValidateError) bool {
 	return i.True(low <= value, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeIntGreaterThanOrEqual(low))
@@ -277,6 +283,7 @@ func (i *Is) IntGreaterThanOrEqual(value, low int, msg func() ifaces.ValidateErr
 }
 
 // IntLessThanOrEqual creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) IntLessThanOrEqual(value, high int, msg func() ifaces.ValidateError) bool {
 	return i.True(value <= high, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeIntLessThanOrEqual(high))
@@ -284,6 +291,7 @@ func (i *Is) IntLessThanOrEqual(value, high int, msg func() ifaces.ValidateError
 }
 
 // Float64Between creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) Float64Between(value, low, high float64, msg func() ifaces.ValidateError) bool {
 	if low > high {
 		panic("low cannot be greater than high")
@@ -294,6 +302,7 @@ func (i *Is) Float64Between(value, low, high float64, msg func() ifaces.Validate
 }
 
 // Float64GreaterThan creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) Float64GreaterThan(value, low float64, msg func() ifaces.ValidateError) bool {
 	return i.True(low < value, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeFloat64GreaterThan(low))
@@ -301,6 +310,7 @@ func (i *Is) Float64GreaterThan(value, low float64, msg func() ifaces.ValidateEr
 }
 
 // Float64LessThan creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) Float64LessThan(value, high float64, msg func() ifaces.ValidateError) bool {
 	return i.True(value < high, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeFloat64LessThan(high))
@@ -308,6 +318,7 @@ func (i *Is) Float64LessThan(value, high float64, msg func() ifaces.ValidateErro
 }
 
 // Float64GreaterThanOrEqual creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) Float64GreaterThanOrEqual(value, low float64, msg func() ifaces.ValidateError) bool {
 	return i.True(low <= value, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeFloat64GreaterThanOrEqual(low))
@@ -315,6 +326,7 @@ func (i *Is) Float64GreaterThanOrEqual(value, low float64, msg func() ifaces.Val
 }
 
 // Float64LessThanOrEqual creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) Float64LessThanOrEqual(value, high float64, msg func() ifaces.ValidateError) bool {
 	return i.True(value <= high, func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldBeFloat64LessThanOrEqual(high))
@@ -322,6 +334,7 @@ func (i *Is) Float64LessThanOrEqual(value, high float64, msg func() ifaces.Valid
 }
 
 // StringLengthBetween creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) StringLengthBetween(value string, low, high int, msg func() ifaces.ValidateError) bool {
 	if low > high {
 		panic("low cannot be greater than high")
@@ -334,6 +347,7 @@ func (i *Is) StringLengthBetween(value string, low, high int, msg func() ifaces.
 }
 
 // StringLengthGreaterThan creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) StringLengthGreaterThan(value string, low int, msg func() ifaces.ValidateError) bool {
 	return i.IntGreaterThan(len(value), low, func() ifaces.ValidateError {
 		defMsg := NewShouldBeIntGreaterThan(low)
@@ -343,6 +357,7 @@ func (i *Is) StringLengthGreaterThan(value string, low int, msg func() ifaces.Va
 }
 
 // StringLengthLessThan creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) StringLengthLessThan(value string, high int, msg func() ifaces.ValidateError) bool {
 	return i.IntLessThan(len(value), high, func() ifaces.ValidateError {
 		defMsg := NewShouldBeIntGreaterThan(high)
@@ -352,6 +367,7 @@ func (i *Is) StringLengthLessThan(value string, high int, msg func() ifaces.Vali
 }
 
 // StringLengthGreaterThanOrEqual creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) StringLengthGreaterThanOrEqual(value string, low int, msg func() ifaces.ValidateError) bool {
 	return i.IntGreaterThanOrEqual(len(value), low, func() ifaces.ValidateError {
 		defMsg := NewShouldBeIntGreaterThanOrEqual(low)
@@ -361,6 +377,7 @@ func (i *Is) StringLengthGreaterThanOrEqual(value string, low int, msg func() if
 }
 
 // StringLengthLessThanOrEqual creates an error unless string's length is between the provided values (inclusive)
+// @return true if valid (no errors added) false if not
 func (i *Is) StringLengthLessThanOrEqual(value string, high int, msg func() ifaces.ValidateError) bool {
 	return i.IntLessThanOrEqual(len(value), high, func() ifaces.ValidateError {
 		defMsg := NewShouldBeIntGreaterThanOrEqual(high)
@@ -369,7 +386,16 @@ func (i *Is) StringLengthLessThanOrEqual(value string, high int, msg func() ifac
 	})
 }
 
+// StringNotEmpty creates an error unless string's length non-zero
+// @return true if valid (no errors added) false if not
+func (i *Is) StringNotEmpty(value string, msg func() ifaces.ValidateError) bool {
+	return i.True(len(value) != 0, func() ifaces.ValidateError {
+		return NewShouldBeNotEmpty()
+	})
+}
+
 // StringInStringSlice creates an error unless the value exists in the values array
+// @return true if valid (no errors added) false if not
 func (i *Is) StringInStringSlice(value string, values []string, msg func() ifaces.ValidateError) bool {
 	for _, v := range values {
 		if 0 == strings.Compare(value, v) {
@@ -381,6 +407,7 @@ func (i *Is) StringInStringSlice(value string, values []string, msg func() iface
 }
 
 // MatchingRegexp creates a ValidationError unless the value matches the regular expression provided
+// @return true if valid (no errors added) false if not
 func (i *Is) MatchingRegexp(value string, reg *regexp.Regexp, msg func() ifaces.ValidateError) bool {
 	return i.True(reg.MatchString(value), func() ifaces.ValidateError {
 		return msgOrDefault(msg, NewShouldMatchingRegexp())
@@ -389,12 +416,28 @@ func (i *Is) MatchingRegexp(value string, reg *regexp.Regexp, msg func() ifaces.
 
 // EmailAddress creates a ValidationError unless the value matches the email validation
 // regular expression: `^[^@]+@.+\.[^.]{2,}$`
+// @return true if valid (no errors added) false if not
 func (i *Is) EmailAddress(value string, msg func() ifaces.ValidateError) bool {
 	return i.MatchingRegexp(value, emailRegexpCompiled, func() ifaces.ValidateError {
 		defMsg := NewShouldMatchingRegexp()
 		defMsg.MsgFmt = shouldBeEmailMsg
 		return msgOrDefault(msg, defMsg)
 	})
+}
+
+// URI creates a ValidationError unless the value is a url as per Go's url.ParseRequestURI method
+// @return true if no error (it was a URL), false if error
+// @return true if valid (no errors added) false if not
+func (i *Is) URI(value string, msg func() ifaces.ValidateError) bool {
+	if i.StringNotEmpty(value, msg) {
+		_, err := url.ParseRequestURI(value)
+		if err != nil {
+			i.Invalid(msgOrDefault(msg, NewShouldBeURL(err.(*url.Error))))
+			return false
+		}
+		return true
+	}
+	return false
 }
 
 var (

@@ -1,11 +1,11 @@
 package issers
 
 import (
+	"github.com/wojnosystems/validates/ifaces"
+	"github.com/wojnosystems/validates/tree"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"testing"
-	"validates/ifaces"
-	"validates/tree"
 )
 
 var defTestMessagePrinter = message.NewPrinter(language.AmericanEnglish)
@@ -304,6 +304,41 @@ func TestIs_ValidStructField(t *testing.T) {
 		}
 		if !c.expectedErrors.IsEqual(is.Errors()) {
 			t.Errorf("%s: errors were not the same, expected: %v, got %v", caseName, *c.expectedErrors, *is.Errors())
+		}
+	}
+}
+
+func TestIs_URL(t *testing.T) {
+	cases := map[string]struct {
+		input    string
+		expected bool
+	}{
+		"empty": {
+			input:    "",
+			expected: false,
+		},
+		"ok url": {
+			input:    "https://www.wojno.com",
+			expected: true,
+		},
+		"bad": {
+			input:    "puppy",
+			expected: false,
+		},
+	}
+
+	for caseName, c := range cases {
+		is := NewRoot()
+		actual := is.URI(c.input, nil)
+
+		if c.expected {
+			if !actual {
+				t.Errorf("%s: expected url", caseName)
+			}
+		} else {
+			if actual {
+				t.Errorf("%s: expected not url", caseName)
+			}
 		}
 	}
 }
